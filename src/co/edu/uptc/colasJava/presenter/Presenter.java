@@ -28,7 +28,7 @@ public class Presenter implements ActionListener {
 
     private void initCustomers() {
         for (int i = 0; i < 12; i++) {
-            customerQueue.push(randomCustomer());
+            customerQueue.offer(randomCustomer());
         }
     }
 
@@ -72,7 +72,7 @@ public class Presenter implements ActionListener {
     }
 
     private void nextCustomerAction() {
-        if (atm.isMoneyAvailable() && popCustomer()) {
+        if (atm.isMoneyAvailable() && pollCustomer()) {
             loadData();
             view.putSuccessStatus();
         } else {
@@ -85,14 +85,10 @@ public class Presenter implements ActionListener {
         view.putTotalMoney(stringCurrencyFormat(atm.getAvailableMoney()));
     }
 
-    public void pushCustomer(Customer customer) {
-        customerQueue.add(customer);
-    }
-
-    public boolean popCustomer() {
+    public boolean pollCustomer() {
         if (customerQueue.getFirst().getBalance() < atm.getAvailableMoney()) {
-            atm.removeMoney((customerQueue.pop()).getBalance());
-            this.pushCustomer(randomCustomer());
+            atm.removeMoney((customerQueue.poll()).getBalance());
+            customerQueue.offer(randomCustomer());
             return true;
         }
         return false;

@@ -1,4 +1,4 @@
-package co.edu.uptc.colasJava.controllers;
+package co.edu.uptc.colasJava.presenter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,13 +14,13 @@ import co.edu.uptc.colasJava.utils.ActionCommandsConstants;
 import co.edu.uptc.colasJava.utils.RandomName;
 import co.edu.uptc.colasJava.view.QueueView;
 
-public class ATMService implements ActionListener {
+public class Presenter implements ActionListener {
 
     private LinkedList<Customer> customerQueue = new LinkedList<>();
     private ATM atm = new ATM();
     private QueueView view;
 
-    public ATMService() {
+    public Presenter() {
         initCustomers();
         view = new QueueView(this);
         loadData();
@@ -118,4 +118,7 @@ public class ATMService implements ActionListener {
         return customer;
     }
 
+    public static void main(String[] args) throws Exception {
+        new Presenter();
+    }
 }

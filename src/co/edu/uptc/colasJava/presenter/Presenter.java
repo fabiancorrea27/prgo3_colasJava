@@ -23,7 +23,7 @@ public class Presenter implements ActionListener {
     public Presenter() {
         initCustomers();
         view = new QueueView(this);
-        loadData();
+        loadViewData();
     }
 
     private void initCustomers() {
@@ -32,7 +32,7 @@ public class Presenter implements ActionListener {
         }
     }
 
-    private void loadData() {
+    private void loadViewData() {
         view.putListNames(customersNameArray());
         putFirstCustomerInfo();
         view.putTotalMoney(stringCurrencyFormat(atm.getAvailableMoney()));
@@ -43,14 +43,22 @@ public class Presenter implements ActionListener {
         return customerNameList().toArray(customersNameArray);
     }
 
+    private List<String> customerNameList() {
+        List<String> namesList = new ArrayList<>();
+        for (Customer customer : customerQueue) {
+            namesList.add(customer.getName());
+        }
+        return namesList;
+    }
+
     private void putFirstCustomerInfo() {
         view.putCustomerName(customerQueue.getFirst().getName());
         view.putCustomerBalance(stringCurrencyFormat(customerQueue.getFirst().getBalance()));
     }
 
-    private String stringCurrencyFormat(int amount) {
+    private String stringCurrencyFormat(int number) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
-        return currencyFormat.format(amount);
+        return currencyFormat.format(number);
     }
 
     @Override
@@ -73,19 +81,14 @@ public class Presenter implements ActionListener {
 
     private void nextCustomerAction() {
         if (atm.isMoneyAvailable() && pollCustomer()) {
-            loadData();
-            view.putSuccessStatus();
+            loadViewData();
+            view.changeSuccessStatus();
         } else {
             view.putFailStatus("DINERO INSUFICIENTE");
         }
     }
 
-    private void addMoneyAction() {
-        atm.addMoney(Integer.parseInt(view.moneyAmountToAdd()));
-        view.putTotalMoney(stringCurrencyFormat(atm.getAvailableMoney()));
-    }
-
-    public boolean pollCustomer() {
+    private boolean pollCustomer() {
         if (customerQueue.getFirst().getBalance() < atm.getAvailableMoney()) {
             atm.removeMoney((customerQueue.poll()).getBalance());
             customerQueue.offer(randomCustomer());
@@ -94,17 +97,12 @@ public class Presenter implements ActionListener {
         return false;
     }
 
-    public void addATMMoney(int money) {
-        atm.addMoney(money);
+    private void addMoneyAction() {
+        atm.addMoney(Integer.parseInt(view.moneyAmountToAdd()));
+        view.putTotalMoney(stringCurrencyFormat(atm.getAvailableMoney()));
     }
 
-    public List<String> customerNameList() {
-        List<String> namesList = new ArrayList<>();
-        for (Customer customer : customerQueue) {
-            namesList.add(customer.getName());
-        }
-        return namesList;
-    }
+   
 
     private Customer randomCustomer() {
         Customer customer = new Customer();

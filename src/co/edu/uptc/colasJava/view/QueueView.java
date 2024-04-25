@@ -15,8 +15,8 @@ public class QueueView {
         addMoneyDialog = new AddMoneyDialog(actionListener);
     }
 
-    public void putListNames(String[] nameStrings){
-        dashboard.getLeftPanel().putListElements(nameStrings);
+    public void putListNames(String[] namesArray){
+        dashboard.getLeftPanel().putListElements(namesArray);
     }
 
     public void putCustomerName(String name){
@@ -31,7 +31,7 @@ public class QueueView {
         dashboard.getRightPanel().setLbltotal(money);
     }
 
-    public void putSuccessStatus(){
+    public void changeSuccessStatus(){
         dashboard.getRightPanel().putSuccessStatus();
     }
 

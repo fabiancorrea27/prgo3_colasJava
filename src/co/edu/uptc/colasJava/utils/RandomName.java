@@ -290,6 +290,7 @@ public class RandomName {
     }
 
     public String ramdonName() {
-        return  names.get((int) (Math.random() * names.size())) + " " + lastNames.get((int) (Math.random() * lastNames.size()));
+        return names.get((int) (Math.random() * names.size())) + " "
+                + lastNames.get((int) (Math.random() * lastNames.size()));
     }
 }
